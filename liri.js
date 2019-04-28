@@ -52,7 +52,7 @@ function omdbFunc() {
       console.log(chalk`{red.bold Title: }` + data.Title)
       console.log(chalk`{red.bold Year: }` + data.Year)
       console.log(chalk`{red.bold IMDB Rating: }` + data.imdbRating)
-      // console.log(chalk`{red.bold Rotten Tomatoes Rating: }` + data.ratings[0].value)
+      console.log(chalk`{red.bold Rotten Tomatoes Rating: }` + data.Ratings[1].Value)
       console.log(chalk`{red.bold Country: }` + data.Country)
       console.log(chalk`{red.bold Language: }` + data.Language)
       console.log(chalk`{red.bold Plot: }` + data.Plot)
