@@ -1,21 +1,17 @@
-const fs = require('fs');
+require('dotenv').config();
 const axios = require('axios');
+// const fs = require('fs');
 const chalk = require('chalk');
 const moment = require('moment');
+
 const keys = require('./keys.js');
-
-require('dotenv').config();
-
-
-// const spotify = new Spotify(keys.spotify);
+const spotify = new Spotify(keys.spotify);
 
 const command = process.argv[2];
 const search = process.argv.slice(3).join(" ");
 const lineBreak = ('=').repeat(50);
 
-
-console.log(search);
-
+// FINISHED BANDS IN TOWN CALL
 function bandsInTownFunc() {
   axios.get('https://rest.bandsintown.com/artists/' + search + '/events?app_id=codingbootcamp').then(
     function (response) {
@@ -43,6 +39,7 @@ function spotifyFunc() {
     });
 }
 
+// FINISHED OMDB CALL
 function omdbFunc() {
   axios.get('http://www.omdbapi.com/?t=' + search + '&apikey=d87ed0ea&type=movie').then(
     function (response) {
@@ -62,7 +59,6 @@ function omdbFunc() {
 }
 
 function spotifyFS() {
-  // ?????????????????
 }
 
 switch (command) {
