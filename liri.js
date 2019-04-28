@@ -18,44 +18,55 @@ console.log(search);
 
 function bandsInTownFunc() {
   axios.get('https://rest.bandsintown.com/artists/' + search + '/events?app_id=codingbootcamp').then(
-    function(response) {
+    function (response) {
       const data = response.data[0];
       console.log(lineBreak);
-      console.log(chalk`{green Venue Name: }` + data.venue.name)
-      console.log(chalk`{green Location: }` + data.venue.city + ', ' + data.venue.region)
-      console.log(chalk`{green Date: }` + moment(data.datetime).format('MM/DD/YYYY'))
-      // console.log(chalk`That is not a recognized command. Please use the following format:\n{white.bold node liri.js} {blue command} {red search item} \n{blue.bold concert-this} {red.bold Band Name} (For finding concerts) \n{blue.bold spotify-this-song} {red.bold Song Name} (For finding song information) \n{blue.bold movie-this} {red.bold Movie Name} (For finding movie information) \n{blue.bold do-what-it-says} {red.bold No Input Needed} (For returning something random)`)
+      console.log(chalk`{blue.bold Venue Name: }` + data.venue.name)
+      console.log(chalk`{blue.bold Location: }` + data.venue.city + ', ' + data.venue.region)
+      console.log(chalk`{blue.bold Date: }` + moment(data.datetime).format('MM/DD/YYYY'))
     }
   )
 }
 
-
 function spotifyFunc() {
-// ?????????????????
+  // ?????????????????
 }
 
 function omdbFunc() {
-
+  axios.get('http://www.omdbapi.com/?t=' + search + '&apikey=d87ed0ea&type=movie').then(
+    function (response) {
+      const data = response.data;
+      console.log(lineBreak);
+      console.log(chalk`{red.bold Title: }` + data.title)
+      console.log(chalk`{red.bold Year: }` + data.year)
+      console.log(chalk`{red.bold IMDB Rating: }` + data.imdbRating)
+      console.log(chalk`{red.bold Rotten Tomatoes Rating: }` + data.ratings[0].value)
+      console.log(chalk`{red.bold Country: }` + data.country)
+      console.log(chalk`{red.bold Language: }` + data.language)
+      console.log(chalk`{red.bold Plot: }` + data.plot)
+      console.log(chalk`{red.bold Actors: }` + data.actors)
+    }
+  )
 }
 
 function spotifyFS() {
-// ?????????????????
+  // ?????????????????
 }
 
 switch (command) {
   case 'concert-this':
-  bandsInTownFunc(search);
-  break;
+    bandsInTownFunc(search);
+    break;
 
-  case 'spotify-this-song': 
-  spotifyFunc(search);
-  break;
+  case 'spotify-this-song':
+    spotifyFunc(search);
+    break;
 
   case 'movie-this':
-  omdbFunc(search);
-  break;
+    omdbFunc(search);
+    break;
 
   case 'do-what-it-says':
-  spotifyFS(search);
-  break;
+    spotifyFS(search);
+    break;
 }
