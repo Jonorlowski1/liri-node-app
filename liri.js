@@ -2,12 +2,12 @@ const fs = require('fs');
 const axios = require('axios');
 const chalk = require('chalk');
 const moment = require('moment');
+const keys = require('./keys.js');
 
 require('dotenv').config();
 
-const keys = require('./keys.js');
 
-// const spotify = new Spotify(keys.spotify);
+const spotify = new Spotify(keys.spotify);
 
 const command = process.argv[2];
 const search = process.argv.slice(3).join(" ");
@@ -29,7 +29,18 @@ function bandsInTownFunc() {
 }
 
 function spotifyFunc() {
-  // ?????????????????
+  // artist name
+  // song name
+  // preview song link
+  // album name of current song
+  spotify
+    .search({ type: 'track', query: search })
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (err) {
+      console.log(err);
+    });
 }
 
 function omdbFunc() {
@@ -37,10 +48,11 @@ function omdbFunc() {
     function (response) {
       const data = response.data;
       console.log(lineBreak);
+      console.log(response.data)
       console.log(chalk`{red.bold Title: }` + data.title)
       console.log(chalk`{red.bold Year: }` + data.year)
       console.log(chalk`{red.bold IMDB Rating: }` + data.imdbRating)
-      console.log(chalk`{red.bold Rotten Tomatoes Rating: }` + data.JSON.parse(ratings[0].value))
+      // console.log(chalk`{red.bold Rotten Tomatoes Rating: }` + data.ratings[0].value)
       console.log(chalk`{red.bold Country: }` + data.country)
       console.log(chalk`{red.bold Language: }` + data.language)
       console.log(chalk`{red.bold Plot: }` + data.plot)
