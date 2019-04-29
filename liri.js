@@ -1,8 +1,9 @@
 require('dotenv').config();
 const axios = require('axios');
-// const fs = require('fs');
+const fs = require('fs');
 const chalk = require('chalk');
 const moment = require('moment');
+const Spotify = require('node-spotify-api');
 
 const keys = require('./keys.js');
 const spotify = new Spotify(keys.spotify);
@@ -25,19 +26,21 @@ function bandsInTownFunc() {
 }
 
 function spotifyFunc() {
-  // artist name
-  // song name
-  // preview song link
-  // album name of current song
   spotify
     .search({ type: 'track', query: search })
     .then(function (response) {
-      console.log(response);
+      const songData = response.tracks.items[0];
+
+      console.log(chalk`{magenta.underline Artist: }` + songData.artists[0].name);
+      console.log(chalk`{magenta.underline Song: }` + songData.name)
+      console.log(chalk`{magenta.underline 30 Second Preview: }` + songData.preview_url);
+      console.log(chalk`{magenta.underline Album: }` + songData.album.name);
     })
     .catch(function (err) {
       console.log(err);
-    });
+    })
 }
+
 
 // FINISHED OMDB CALL
 function omdbFunc() {
@@ -58,7 +61,9 @@ function omdbFunc() {
   )
 }
 
-function spotifyFS() {
+
+function fsRead(newCommand, newSearch) {
+
 }
 
 switch (command) {
@@ -75,6 +80,19 @@ switch (command) {
     break;
 
   case 'do-what-it-says':
-    spotifyFS(search);
+    fs.readFile('random.txt', 'utf8', function (error, data) {
+      const newCommand = data.split(',')[0]
+      const newSearch = data.split(',')[1]
+
+      if (error) {
+        return console.log(error);
+
+      } else {
+
+        console.log(newCommand);
+        console.log(newSearch);
+        
+      }
+    })
     break;
 }
