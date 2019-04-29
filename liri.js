@@ -82,16 +82,15 @@ switch (command) {
   case 'do-what-it-says':
     fs.readFile('random.txt', 'utf8', function (error, data) {
       const newCommand = data.split(',')[0]
-      const newSearch = data.split(',')[1]
+      const newSearch = data.split(',')[1].replace(/['"]+/g, '');
 
       if (error) {
         return console.log(error);
-
       } else {
-
         console.log(newCommand);
         console.log(newSearch);
-        
+        // spotifyFunc(newSearch);
+        // omdbFunc(newSearch);
       }
     })
     break;
