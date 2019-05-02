@@ -8,9 +8,8 @@ const Spotify = require('node-spotify-api');
 const keys = require('./keys.js');
 const spotify = new Spotify(keys.spotify);
 
-const command = process.argv[2];
 const search = process.argv.slice(3).join(" ");
-const lineBreak = ('=').repeat(50);
+const lineBreak = (chalk`{red.bold =}`).repeat(50);
 
 // FINISHED BANDS IN TOWN CALL
 function bandsInTownFunc() {
@@ -25,10 +24,16 @@ function bandsInTownFunc() {
   )
 }
 
-function spotifyFunc() {
+// FINISHED SPOTIFY CALL
+const spotifyFunc = function(songName) {
+  if (songName === undefined) {
+    songName = "What's my age again";
+  }
+
   spotify
-    .search({ type: 'track', query: search })
+    .search({ type: 'track', query: songName })
     .then(function (response) {
+      console.log(lineBreak);
       const songData = response.tracks.items[0];
 
       console.log(chalk`{magenta.underline Artist: }` + songData.artists[0].name);
@@ -40,7 +45,6 @@ function spotifyFunc() {
       console.log(err);
     })
 }
-
 
 // FINISHED OMDB CALL
 function omdbFunc() {
@@ -61,37 +65,45 @@ function omdbFunc() {
   )
 }
 
+// FINISHED FS READ FILE / SPOTIFY FUNCTION
+const doWhatItSays = function() {
+  fs.readFile("random.txt", "utf8", function(error, data) {
+    console.log(data);
 
-function fsRead(newCommand, newSearch) {
+    const dataArr = data.split(",");
 
-}
+    if (dataArr.length === 2) {
+      pick(dataArr[0], dataArr[1]);
+    } else if (dataArr.length === 1) {
+      pick(dataArr[0]);
+    }
+  });
+};
 
-switch (command) {
+const pick = function(caseData, functionData) {
+  switch (caseData) {
   case 'concert-this':
-    bandsInTownFunc(search);
+    bandsInTownFunc(functionData);
     break;
 
   case 'spotify-this-song':
-    spotifyFunc(search);
+    spotifyFunc(functionData);
     break;
 
   case 'movie-this':
-    omdbFunc(search);
+    omdbFunc(functionData);
     break;
 
   case 'do-what-it-says':
-    fs.readFile('random.txt', 'utf8', function (error, data) {
-      const newCommand = data.split(',')[0]
-      const newSearch = data.split(',')[1].replace(/['"]+/g, '');
-
-      if (error) {
-        return console.log(error);
-      } else {
-        console.log(newCommand);
-        console.log(newSearch);
-        // spotifyFunc(newSearch);
-        // omdbFunc(newSearch);
-      }
-    })
+    doWhatItSays();
     break;
+  default:
+    console.log("LIRI doesn't know that");
 }
+}
+
+const runThis = function(argOne, argTwo) {
+  pick(argOne, argTwo);
+};
+
+runThis(process.argv[2], process.argv.slice(3).join(" "));
